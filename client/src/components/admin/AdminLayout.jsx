@@ -15,7 +15,7 @@ export default function AdminLayout() {
             <h1 className="text-2xl font-semibold ml-4">Dashboard</h1>
           </div>
 
-          <div className="bg-background rounded-xl shadow-sm p-6">
+          <div className="bg-background rounded-xl shadow-sm ">
             <Outlet />
           </div>
         </main>
