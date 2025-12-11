@@ -27,6 +27,7 @@ import { LoadingPage } from "./components/LoadingPage";
 import Customer from "./page/acountant/Customer";
 import ManageLoan from "./page/acountant/ManageLoan";
 import DipositSaving from "./page/acountant/DipositSaving";
+import RegisterCustomer from "./page/acountant/RegisterCustomer";
 
 function App() {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="register-employee" element={<RegisterEmploye />} />
             <Route path="manage-employee" element={<Employee />} />
-            <Route path="new-customer" element={<ViewNewCustomer />} />
+            <Route path="new-customer" element={<Customer />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="log-file" element={<LogFile />} />
             <Route path="view-feedback" element={<ViewFeedback />} />
@@ -64,6 +65,7 @@ function App() {
           <Route path="/accountant" element={<AccountantLayout />}>
             <Route index element={<Customer />} />
             <Route path="manage-loan" element={<ManageLoan />} />
+            <Route path="registercustomer" element={<RegisterCustomer />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="deposit-save-manage" element={<DipositSaving />} />
             <Route path="settings" element={<Setting />} />

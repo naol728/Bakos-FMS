@@ -97,6 +97,7 @@ const authSlice = createSlice({
         localStorage.removeItem("user");
         localStorage.removeItem("role");
         localStorage.removeItem("token");
+        localStorage.removeItem("refreshtoken");
       });
   },
 });

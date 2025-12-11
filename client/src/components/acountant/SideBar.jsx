@@ -24,6 +24,7 @@ import { NavLink, useLocation } from "react-router-dom";
 
 const items = [
   { title: "Manage Customer", url: "/accountant", icon: Users },
+  { title: "Register Customer", url: "/accountant/registercustomer", icon: Users },
   {
     title: "Manage  Loan",
     url: "/accountant/manage-loan",

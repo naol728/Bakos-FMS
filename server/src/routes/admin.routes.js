@@ -11,9 +11,11 @@ import {
 } from "../controllers/admin.controller.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { protect } from "../middleware/auth.middleware.js";
+import { upload } from "./../middleware/upload.js";
 
 const route = express.Router();
 route.use(protect);
+route.use(upload.single("photo"));
 route.post("/createemployee", asyncHandler(createEmployee));
 route.get("/getemployee", asyncHandler(getEmployeee));
 route.patch("/updateemployee", asyncHandler(updateEmployee));

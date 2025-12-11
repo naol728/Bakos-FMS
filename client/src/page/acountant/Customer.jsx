@@ -42,22 +42,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import RegisterEmployee from "../../components/admin/RegisterEmploye";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 import EditEmployee from "@/components/admin/EditEmployee";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteEmployee } from "@/api/admin";
 import { toast } from "sonner";
+import useCustomer from "@/hooks/customer/useCustomer";
+import { deleteCustomer } from "@/api/accountant";
+import EditCustomer from "@/components/acountant/UpdateCustomer";
 
-export default function Employee() {
-  const { employee, employeeerr, loadingemployee } = useEmployee();
+export default function Customer() {
+  const { customer, customererror, customerloading } = useCustomer();
+  console.log(customer);
   const queryclient = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: deleteEmployee,
-    mutationKey: ["deleteEmployee"],
+    mutationFn: deleteCustomer,
+    mutationKey: ["deleteCustomer"],
     onSuccess: (data) => {
       console.log(data);
-      queryclient.invalidateQueries({ queryKey: ["getEmployee"] });
+      queryclient.invalidateQueries({ queryKey: ["getCusomers"] });
       toast.success(data.message || "Employee deleted Successfuly");
     },
     onError: (err) => {
@@ -135,29 +138,57 @@ export default function Employee() {
         </div>
       ),
     },
-
-    {
-      accessorKey: "role",
-      header: "Role",
-      cell: ({ row }) => {
-        const role = row.getValue("role");
-        return (
-          <Badge
-            variant="outline"
-            className={`capitalize border px-2 py-1 ${roleColor[role]}`}
-          >
-            {role.replace("_", " ")}
-          </Badge>
-        );
-      },
-    },
-
     {
       accessorKey: "phone",
       header: "Phone No",
       cell: ({ row }) => (
         <span className="text-muted-foreground">
           {row.getValue("phone") || "—"}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "age",
+      header: "Age",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">
+          {row.getValue("age") || "—"}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "account_no",
+      header: "Acount no",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">
+          {row.getValue("account_no") || "—"}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "share_amount",
+      header: "Share amount",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">
+          {row.getValue("share_amount") || "—"}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "deposit_amount",
+      header: "Deposit amount",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">
+          {row.getValue("deposit_amount") || "—"}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "sex",
+      header: "Phone No",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">
+          {row.getValue("sex") || "—"}
         </span>
       ),
     },
@@ -214,16 +245,16 @@ export default function Employee() {
 
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Update Employee?</DialogTitle>
-                    <DialogDescription>Edit Employee</DialogDescription>
-                    <EditEmployee employee={row.original} />
+                    <DialogTitle>Update Customer?</DialogTitle>
+                    <DialogDescription>Edit Customer</DialogDescription>
+                    <EditCustomer customer={row.original} />
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
 
               <DropdownMenuItem
                 className="text-red-600"
-                onClick={() => handledelete(emp.id)}
+                onClick={() => handledelete(emp.user_id)}
               >
                 Delete
               </DropdownMenuItem>
@@ -235,7 +266,7 @@ export default function Employee() {
   ];
 
   const table = useReactTable({
-    data: employee?.data,
+    data: customer?.customers || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -252,34 +283,10 @@ export default function Employee() {
       rowSelection,
     },
   });
-  if (loadingemployee) return <LoadingPage />;
+  if (customerloading) return <LoadingPage />;
 
   return (
     <>
-      {/* Page Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold text-foreground">Customer</h1>
-
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              + Add Employee
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="bg-card border-border shadow-xl">
-            <DialogHeader>
-              <DialogTitle>Add New Employee</DialogTitle>
-              <DialogDescription>
-                Fill in employee details below.
-              </DialogDescription>
-            </DialogHeader>
-
-            <RegisterEmployee />
-          </DialogContent>
-        </Dialog>
-      </div>
-
       {/* Table Card */}
       <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
         {/* Toolbar (Search + Columns) */}
@@ -325,62 +332,68 @@ export default function Employee() {
         </div>
 
         {/* Table */}
-        <Table>
-          <TableHeader className="bg-muted/50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="text-foreground font-semibold text-xs uppercase tracking-wide"
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+        {/* Responsive Scroll Wrapper */}
+        <ScrollArea className="w-full rounded-lg border">
+          <div className="min-w-[1200px]">
+            <Table>
+              <TableHeader className="bg-muted/50">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead
+                        key={header.id}
+                        className="whitespace-nowrap font-semibold text-xs uppercase tracking-wide"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
+              </TableHeader>
 
-          {/* Table Body */}
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row, index) => (
-                <TableRow
-                  key={row.id}
-                  className={`transition-colors ${
-                    index % 2 === 0 ? "bg-background" : "bg-muted/30"
-                  } hover:bg-accent/50`}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className="py-3 text-sm text-foreground"
+              <TableBody>
+                {table.getRowModel().rows.length ? (
+                  table.getRowModel().rows.map((row, index) => (
+                    <TableRow
+                      key={row.id}
+                      className={`transition-colors ${
+                        index % 2 === 0 ? "bg-background" : "bg-muted/30"
+                      } hover:bg-accent/50`}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className="whitespace-nowrap py-3 text-sm"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center text-muted-foreground"
+                    >
+                      No results found.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center text-muted-foreground"
-                >
-                  No results found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
 
         {/* Pagination */}
         <div className="flex justify-between items-center p-4 border-t bg-muted/40">
