@@ -40,66 +40,6 @@ export const Login = async (req, res) => {
   }
 };
 
-export const signup = async (req, res) => {
-  try {
-    const { email, password, name, phone } = req.body;
-
-    if (!email || !password || !name) {
-      return res.status(400).json({
-        error: "Email, password, and name are required.",
-      });
-    }
-
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name, phone },
-      },
-    });
-
-    if (authError) {
-      return res.status(400).json({
-        error: authError.message,
-      });
-    }
-
-    const userId = authData.user?.id;
-
-    if (!userId) {
-      return res.status(500).json({
-        error: "Failed to create user account.",
-      });
-    }
-
-    // 2️⃣ Insert extra profile data into "users" table
-    const { error: insertError } = await supabase.from("users").insert([
-      {
-        id: userId, // foreign key to auth.users
-        full_name: name,
-        phone,
-        email,
-      },
-    ]);
-
-    if (insertError) {
-      return res.status(400).json({
-        error: insertError.message,
-      });
-    }
-
-    // 3️⃣ Return success response
-    return res.status(201).json({
-      message: "User registered successfully",
-      user: authData.user,
-    });
-  } catch (err) {
-    console.error("Signup error:", err);
-    res.status(500).json({
-      error: "Internal server error",
-    });
-  }
-};
 export const me = async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
