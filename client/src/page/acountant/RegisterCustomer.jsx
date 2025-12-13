@@ -23,7 +23,6 @@ export default function RegisterCustomer() {
     sex: "",
     age: "",
     deposit_amount: "",
-    share_amount: "",
     phone: "",
     email: "",
     password: "",
@@ -142,15 +141,6 @@ export default function RegisterCustomer() {
               name="deposit_amount"
               type="number"
               value={formData.deposit_amount}
-              onChange={handleChange}
-              disabled={isPending}
-            />
-
-            <InputField
-              label="Share Amount"
-              name="share_amount"
-              type="number"
-              value={formData.share_amount}
               onChange={handleChange}
               disabled={isPending}
             />

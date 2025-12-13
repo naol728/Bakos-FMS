@@ -1,4 +1,6 @@
+import { transactionLog } from "../utils/transaction.js";
 import { dbReadFactory } from "./dbReadFactory.js";
+import { dbUpdateFactory } from "./dbUpdateFactory.js";
 
 export const getRequests = async (req, res) => {
   const userid = req.user.id;
@@ -38,5 +40,93 @@ export const getRequest = async (req, res) => {
     data,
   });
 };
+export const getUserWithdrawalRequest = async (req, res) => {
+  const { user_id } = req.params;
+  if (!user_id) {
+    return res.status(400).json({
+      message: "User ID required",
+    });
+  }
+
+  const { data, error } = await dbReadFactory("withdraw_requests", {
+    customer_id: user_id,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      message: error.message,
+      detail: error,
+    });
+  }
+
+  // Return data
+  res.status(200).json({
+    message: "Successfully fetched",
+    data,
+  });
+};
 
 export const addRequest = async (req, res) => {};
+
+export const withdraw = async (req, res) => {
+  const { amount, user_id } = req.body;
+
+  if (!user_id || !amount || amount <= 0) {
+    return res.status(400).json({
+      message: "User ID and valid amount are required",
+    });
+  }
+
+  const { data: customers, error: customererr } = await dbReadFactory(
+    "customers",
+    { id: user_id }
+  );
+
+  if (customererr) {
+    return res.status(400).json({
+      message: customererr.message,
+    });
+  }
+
+  if (!customers || customers.length === 0) {
+    return res.status(404).json({
+      message: "Customer not found",
+    });
+  }
+
+  const customer = customers[0];
+
+  if (customer.deposit_amount < amount) {
+    return res.status(400).json({
+      message: "Insufficient balance",
+    });
+  }
+
+  const { data, error } = await dbUpdateFactory(
+    "customers",
+    {
+      deposit_amount: customer.deposit_amount - amount,
+    },
+    {
+      id: user_id,
+    }
+  );
+
+  if (error) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+  await transactionLog({
+    type: deposittype[1],
+    customer_id: customer.id,
+    amount,
+    // reference_id: deposit.id,
+  });
+
+  // Success response
+  res.status(200).json({
+    message: "Successfully withdrawn",
+    data,
+  });
+};
