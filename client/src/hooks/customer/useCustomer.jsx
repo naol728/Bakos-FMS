@@ -1,19 +1,23 @@
-import { getCusomers } from "@/api/accountant";
+import { getCustomer } from "@/api/accountant";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 
-export default function useCustomer() {
+export default function useCustomer(id) {
   const {
-    data: customer,
-    error: customererror,
+    data,
     isLoading: customerloading,
+    error: customererror,
   } = useQuery({
-    queryFn: getCusomers,
-    queryKey: ["getCusomers"],
+    queryKey: ["getCustomer", id],
+    queryFn: () => getCustomer(id),
+    enabled: id !== undefined || id === undefined,
   });
+  console.log(data);
+  const customers = Array.isArray(data) ? data : data?.data || [];
+  const user = Array.isArray(data) ? data : data?.user || [];
   return {
-    customer,
+    customer: customers,
     customererror,
     customerloading,
+    user,
   };
 }

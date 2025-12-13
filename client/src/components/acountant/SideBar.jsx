@@ -24,7 +24,11 @@ import { NavLink, useLocation } from "react-router-dom";
 
 const items = [
   { title: "Manage Customer", url: "/accountant", icon: Users },
-  { title: "Register Customer", url: "/accountant/registercustomer", icon: Users },
+  {
+    title: "Register Customer",
+    url: "/accountant/registercustomer",
+    icon: Users,
+  },
   {
     title: "Manage  Loan",
     url: "/accountant/manage-loan",
@@ -33,7 +37,7 @@ const items = [
   { title: "Meeting Dates", url: "/accountant/meeting-date", icon: Calendar },
 
   {
-    title: "Deposit & Saving Mangemnt",
+    title: "Deposit & Saving ",
     url: "/accountant/deposit-save-manage",
     icon: Calendar,
   },
