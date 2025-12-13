@@ -103,7 +103,7 @@ export default function Customer() {
     // NAME + PHOTO COMBINED
     {
       accessorKey: "full_name",
-      header: "Employee",
+      header: "Customer",
       cell: ({ row }) => {
         const name = row.getValue("full_name");
         const photo = row.original.photo;

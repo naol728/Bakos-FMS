@@ -4,3 +4,11 @@ const BASE = "loan";
 export const getLoans = async () => {
   return handleApiResponse(() => apiClient.get(`/${BASE}/getloans`));
 };
+export const loandepesment = async (data) => {
+  return handleApiResponse(() =>
+    apiClient.post(`/${BASE}/loandepesment`, data)
+  );
+};
+export const loanrepayment = async (data) => {
+  return handleApiResponse(() => apiClient.post(`/${BASE}/repayloan`, data));
+};

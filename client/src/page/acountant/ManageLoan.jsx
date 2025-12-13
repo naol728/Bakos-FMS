@@ -39,6 +39,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { loandepesment, loanrepayment } from "@/api/loan";
+import { toast } from "sonner";
+import Repayment from "@/components/acountant/Repayment";
 
 export default function ManageLoan() {
   const { loan, loanerr, loanloading } = useLoan();
@@ -46,34 +52,30 @@ export default function ManageLoan() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const queryclient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: loandepesment,
+    onSuccess: (data) => {
+      queryclient.invalidateQueries({ queryKey: ["getLoans"] });
+      queryclient.invalidateQueries({ queryKey: ["getCustomers"] });
+      queryclient.invalidateQueries({ queryKey: ["getCustomer"] });
+      toast.success(data.message);
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error(err.message);
+    },
+  });
+
+  const handleDespense = (data) => {
+    const { customer_id, amount, id } = data;
+    const user_id = customer_id;
+    mutate({ user_id, amount, id });
+  };
 
   // Columns
   const columns = React.useMemo(
     () => [
-      {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
       {
         accessorFn: (row) =>
           row.customer.first_name + " " + row.customer.father_name,
@@ -188,12 +190,33 @@ export default function ManageLoan() {
                     <DialogTrigger>loan details</DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Are you absolutely sure?</DialogTitle>
-                        <DialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
-                        </DialogDescription>
+                        <DialogTitle>loan depesment and repayment</DialogTitle>
+                        <DialogDescription></DialogDescription>
+                        <Tabs defaultValue="account" className="w-[400px]">
+                          <TabsList>
+                            <TabsTrigger value="depesment">
+                              Repayment
+                            </TabsTrigger>
+                            <TabsTrigger value="repayment">
+                              Depesment{" "}
+                            </TabsTrigger>
+                          </TabsList>
+                          <TabsContent value="repayment">
+                            <div>Make Depesment to the Customer Account</div>
+                            {loanRow.is_despens ? (
+                              "Already Despensed "
+                            ) : (
+                              <Button
+                                onClick={() => handleDespense(row.original)}
+                              >
+                                Depens
+                              </Button>
+                            )}
+                          </TabsContent>
+                          <TabsContent value="depesment">
+                            <Repayment id={loanRow.id} />
+                          </TabsContent>
+                        </Tabs>
                       </DialogHeader>
                     </DialogContent>
                   </Dialog>
