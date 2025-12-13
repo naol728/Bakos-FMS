@@ -183,7 +183,6 @@ export default function ManageLoan() {
   return (
     <div className="w-full">
       <div className="text-xl font-extrabold">Aprovied Loan</div>
-
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."

@@ -28,6 +28,7 @@ import Customer from "./page/acountant/Customer";
 import ManageLoan from "./page/acountant/ManageLoan";
 import DipositSaving from "./page/acountant/DipositSaving";
 import RegisterCustomer from "./page/acountant/RegisterCustomer";
+import CustomerDepositSaviing from "./page/acountant/CustomerDepositSaviing";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,6 +69,10 @@ function App() {
             <Route path="registercustomer" element={<RegisterCustomer />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="deposit-save-manage" element={<DipositSaving />} />
+            <Route
+              path="deposit-save-manage/:id"
+              element={<CustomerDepositSaviing />}
+            />
             <Route path="settings" element={<Setting />} />
           </Route>
         </Route>

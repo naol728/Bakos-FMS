@@ -8,7 +8,11 @@ import { supabase } from "../config/supabase.js";
  */
 export const dbInsertFactory = async (table, payload) => {
   try {
-    const { data, error } = await supabase.from(table).insert([payload]);
+    const { data, error } = await supabase
+      .from(table)
+      .insert(payload)
+      .select()
+      .single(); // 👈 returns ONE inserted row
 
     if (error) {
       return {

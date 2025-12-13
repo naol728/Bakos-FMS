@@ -47,7 +47,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import EditEmployee from "@/components/admin/EditEmployee";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import useCustomer from "@/hooks/customer/useCustomer";
+import useCustomer from "@/hooks/customer/useCustomers";
 import { deleteCustomer } from "@/api/accountant";
 import EditCustomer from "@/components/acountant/UpdateCustomer";
 
@@ -165,15 +165,7 @@ export default function Customer() {
         </span>
       ),
     },
-    {
-      accessorKey: "share_amount",
-      header: "Share amount",
-      cell: ({ row }) => (
-        <span className="text-muted-foreground">
-          {row.getValue("share_amount") || "—"}
-        </span>
-      ),
-    },
+
     {
       accessorKey: "deposit_amount",
       header: "Deposit amount",

@@ -14,7 +14,6 @@ export const createCustomer = async (req, res) => {
     sex,
     age,
     deposit_amount,
-    share_amount,
     phone,
     email,
     password,
@@ -98,7 +97,6 @@ export const createCustomer = async (req, res) => {
       sex,
       age,
       deposit_amount,
-      share_amount,
     }
   );
   if (customrdberror) {
@@ -123,7 +121,6 @@ export const updateCustomer = async (req, res) => {
     sex,
     age,
     deposit_amount,
-    share_amount,
     phone,
     user_id,
   } = req.body;
@@ -132,7 +129,6 @@ export const updateCustomer = async (req, res) => {
   const full_name = `${first_name} ${father_name} ${grand_father_name}`;
   let photoUrl = null;
 
-  // Upload photo if provided
   if (photoFile) {
     const fileExt = photoFile.originalname.split(".").pop();
     const fileName = `${uuidv4()}.${fileExt}`;
@@ -191,7 +187,6 @@ export const updateCustomer = async (req, res) => {
       sex,
       age,
       deposit_amount,
-      share_amount,
     },
     {
       user_id,
@@ -278,5 +273,30 @@ export const getCustomers = async (req, res) => {
   res.status(200).json({
     message: "Successfully fetched customers",
     customers: merged,
+  });
+};
+
+export const getCustomer = async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    res.status(400).json({
+      message: "id is required ",
+    });
+  }
+  const { error, data } = await dbReadFactory("customers", { id }, true);
+  const { error: usererr, data: user } = await dbReadFactory(
+    "users",
+    { id: data.user_id },
+    true
+  );
+  if (error || usererr) {
+    res.status(400).json({
+      message: "customer not found",
+    });
+  }
+  res.status(200).json({
+    message: "Sucessfully customer fetched ",
+    data,
+    user,
   });
 };
