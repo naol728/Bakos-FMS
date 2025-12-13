@@ -21,7 +21,6 @@ export default function EditCustomer({ customer }) {
     sex: customer.sex || "",
     age: customer.age || "",
     deposit_amount: customer.deposit_amount || "",
-    share_amount: customer.share_amount || "",
     phone: customer.phone || "",
   });
 
@@ -194,20 +193,6 @@ export default function EditCustomer({ customer }) {
             type="number"
             name="deposit_amount"
             value={formData.deposit_amount}
-            onChange={handleChange}
-            disabled={isPending}
-          />
-        </div>
-
-        {/* Share Amount */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">
-            Share Amount
-          </label>
-          <Input
-            type="number"
-            name="share_amount"
-            value={formData.share_amount}
             onChange={handleChange}
             disabled={isPending}
           />

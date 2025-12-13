@@ -11,7 +11,6 @@ export default function useCustomer(id) {
     queryFn: () => getCustomer(id),
     enabled: id !== undefined || id === undefined,
   });
-  console.log(data);
   const customers = Array.isArray(data) ? data : data?.data || [];
   const user = Array.isArray(data) ? data : data?.user || [];
   return {

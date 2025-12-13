@@ -2,6 +2,7 @@ import { dbInsertFactory } from "./dbInsertFactory.js";
 import { dbUpdateFactory } from "./dbUpdateFactory.js";
 import { dbReadFactory } from "./dbReadFactory.js";
 import { transactionLog } from "./../utils/transaction.js";
+import { deposittype } from "./../utils/type.js";
 
 export const deposit = async (req, res) => {
   let { amount, source, customer_id } = req.body;
@@ -68,7 +69,7 @@ export const deposit = async (req, res) => {
 
   // ✅ Log transaction (LAST STEP)
   await transactionLog({
-    type: "DEPOSIT",
+    type: deposittype[0],
     customer_id: customer.id,
     amount,
     reference_id: deposit.id,

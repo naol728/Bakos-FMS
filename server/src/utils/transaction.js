@@ -5,7 +5,7 @@ export const transactionLog = async ({
   type,
   customer_id,
   amount,
-  reference_id,
+  reference_id = null,
 }) => {
   try {
     const { error } = await dbInsertFactory("transactions", {
@@ -14,6 +14,7 @@ export const transactionLog = async ({
       amount,
       reference_id,
     });
+    console.log(error);
     if (error) {
       console.log("Faild to save log", error.message);
     }
