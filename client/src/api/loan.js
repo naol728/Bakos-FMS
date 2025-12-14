@@ -12,3 +12,11 @@ export const loandepesment = async (data) => {
 export const loanrepayment = async (data) => {
   return handleApiResponse(() => apiClient.post(`/${BASE}/repayloan`, data));
 };
+export const getLoanRequests = async () => {
+  return handleApiResponse(() => apiClient.get(`/${BASE}/getloanrequests`));
+};
+export const updateStatusLoanCommite = async (data) => {
+  return handleApiResponse(() =>
+    apiClient.post(`/${BASE}/commiteaproval/${data.id}`, data)
+  );
+};

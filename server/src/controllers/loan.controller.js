@@ -170,3 +170,64 @@ export const repayLoan = async (req, res) => {
     },
   });
 };
+export const getLoanRequests = async (req, res) => {
+  const { data, error } = await supabase.from("loan_requests").select(`
+      *,
+      customer:customer_id (
+        first_name,
+        father_name,
+        grand_father_name,
+        deposit_amount,
+        account_no,
+        user_id,
+        users:user_id (
+          photo,
+          phone,
+          email
+        ),
+        deposits:deposits (
+          amount,
+          source,
+          created_at
+        )
+      )
+    `);
+
+  if (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    data,
+  });
+};
+export const updateStatusLoanCommite = async (req, res) => {
+  const { id } = req.params;
+  const { committee_comment, status } = req.body;
+  if (!committee_comment || !status || !id) {
+    return res.status(400).json({
+      message: "commitee_comment status id require",
+    });
+  }
+  const { data, error } = await dbUpdateFactory(
+    "loan_requests",
+    {
+      status,
+      committee_comment,
+    },
+    { id }
+  );
+  if (error) {
+    return res.status(400).json({
+      message: "error updating status ",
+    });
+  }
+  res.status(200).json({
+    message: "Sucessfully Updated status",
+    data,
+  });
+};

@@ -29,6 +29,7 @@ import ManageLoan from "./page/acountant/ManageLoan";
 import DipositSaving from "./page/acountant/DipositSaving";
 import RegisterCustomer from "./page/acountant/RegisterCustomer";
 import CustomerDepositSaviing from "./page/acountant/CustomerDepositSaviing";
+import LoanRequests from "./page/loancommittee/LoanRequests";
 
 function App() {
   const dispatch = useDispatch();
@@ -55,10 +56,12 @@ function App() {
             <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
-        {/* customer route  */}
-        <Route element={<ProtectedRoute roles={["customer"]} />}>
-          <Route path="/customer" element={<CustomerLayout />}>
-            <Route index element={<>customer</>} />
+        {/* loan_committee route  */}
+        <Route element={<ProtectedRoute roles={["loan_committee"]} />}>
+          <Route path="/loancommittee" element={<LoanCommiteLayout />}>
+            <Route index element={<LoanRequests />} />
+            <Route path="meeting-date" element={<MettingDate />} />
+            <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
         {/* accountant route  */}
@@ -76,6 +79,14 @@ function App() {
             <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
+        
+        {/* customer route  */}
+        <Route element={<ProtectedRoute roles={["customer"]} />}>
+          <Route path="/customer" element={<CustomerLayout />}>
+            <Route index element={<>customer</>} />
+          </Route>
+        </Route>
+
         {/* manager route  */}
         <Route element={<ProtectedRoute roles={["manager"]} />}>
           <Route path="/manager" element={<ManagerLayout />}>
@@ -83,12 +94,6 @@ function App() {
           </Route>
         </Route>
 
-        {/* loan_committee route  */}
-        <Route element={<ProtectedRoute roles={["loan_committee"]} />}>
-          <Route path="/loancommittee" element={<LoanCommiteLayout />}>
-            <Route index element={<>loan_committee </>} />
-          </Route>
-        </Route>
         {/* finance route  */}
         <Route element={<ProtectedRoute roles={["finance"]} />}>
           <Route path="/finance" element={<FinanceLayout />}>
