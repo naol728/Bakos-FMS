@@ -125,15 +125,7 @@ export default function DepositSaving() {
 
                   {/* Status Badge */}
                   <TableCell>
-                    <Badge
-                      variant={
-                        c.account_status === "active"
-                          ? "success"
-                          : "destructive"
-                      }
-                    >
-                      {c.account_status === "active" ? "Active" : "Disabled"}
-                    </Badge>
+                    <Badge variant={"success"}>{"Active"}</Badge>
                   </TableCell>
 
                   {/* Deposit Amount */}

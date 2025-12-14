@@ -15,10 +15,9 @@ export default function MeetingDate() {
 
   const [search, setSearch] = useState("");
 
-  // Filter meetings by title, description, or posted_by user name
   const rows = useMemo(() => {
     if (!data?.data) return [];
-    return data.data.filter(
+    return data?.data?.filter(
       (meeting) =>
         meeting.title.toLowerCase().includes(search.toLowerCase()) ||
         (meeting.description &&
