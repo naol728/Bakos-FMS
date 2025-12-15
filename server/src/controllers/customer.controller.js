@@ -300,3 +300,33 @@ export const getCustomer = async (req, res) => {
     user,
   });
 };
+export const getMyinfo = async (req, res) => {
+  const id = req.user.id;
+
+  if (!id) {
+    return res.status(400).json({
+      message: "id is required ",
+    });
+  }
+  const { error: usererr, data: user } = await dbReadFactory(
+    "users",
+    { id },
+    true
+  );
+  const { error, data } = await dbReadFactory(
+    "customers",
+    { user_id: id },
+    true
+  );
+
+  if (error || usererr) {
+    return res.status(400).json({
+      message: "customer not found",
+    });
+  }
+  res.status(200).json({
+    message: "Sucessfully customer fetched ",
+    data,
+    user,
+  });
+};

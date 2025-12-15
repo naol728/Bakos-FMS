@@ -33,6 +33,10 @@ import EmployeeManager from "./page/manager/EmployeeManager";
 import Postmeeting from "./page/manager/Postmeeting";
 import WithdrawRequest from "./page/manager/WithdrawRequest";
 import Loanrequest from "./page/manager/Loanrequest";
+import LoanRequest from "./page/customer/LoanRequest";
+import Withdraw from "./page/customer/Withdraw";
+import Feedback from "./page/customer/Feedback";
+import CustomerDashboard from "./page/customer/CustomerDashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -97,7 +101,11 @@ function App() {
         {/* customer route  */}
         <Route element={<ProtectedRoute roles={["customer"]} />}>
           <Route path="/customer" element={<CustomerLayout />}>
-            <Route index element={<>customer</>} />
+            <Route index element={<CustomerDashboard />} />
+            <Route path="loan-reqest" element={<LoanRequest />} />
+            <Route path="withdraw-request" element={<Withdraw />} />
+            <Route path="feedback" element={<Feedback />} />
+            <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
 

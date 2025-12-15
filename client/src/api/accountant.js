@@ -29,3 +29,7 @@ export const updateCustomer = async (data) => {
 export const getCustomer = async (id) => {
   return handleApiResponse(() => apiClient.get(`/${BASE}/get/${id}`));
 };
+
+export const getme = async () => {
+  return handleApiResponse(() => apiClient.get(`/${BASE}/getme`));
+};
