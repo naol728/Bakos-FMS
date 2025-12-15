@@ -9,9 +9,7 @@ export const createEmployee = async (data) => {
 export const getEmployee = async () => {
   return handleApiResponse(() => apiClient.get(`/${BASE}/getemployee`));
 };
-export const getFeedbacks = async () => {
-  return handleApiResponse(() => apiClient.get(`/${BASE}/feedbacks`));
-};
+
 export const getmeetings = async () => {
   return handleApiResponse(() => apiClient.get(`/${BASE}/getmettings`));
 };

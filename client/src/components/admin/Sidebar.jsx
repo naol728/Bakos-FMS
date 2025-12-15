@@ -23,7 +23,6 @@ import {
 import { NavLink, useLocation } from "react-router-dom";
 
 const items = [
-  { title: "Dashboard", url: "/admin", icon: LayoutDashboardIcon },
   { title: "Manage Employee", url: "/admin/manage-employee", icon: Users },
   {
     title: "New Customers",
