@@ -16,7 +16,6 @@ import LoanCommiteLayout from "./components/loancommittee/LoanCommiteLayout";
 import FinanceLayout from "./components/finance/FinanceLayout";
 import RegisterEmploye from "./components/admin/RegisterEmploye";
 import Employee from "./page/admin/Employee";
-import ViewNewCustomer from "./page/admin/ViewNewCustomer";
 import MettingDate from "./page/admin/MettingDate";
 import LogFile from "./page/admin/LogFile";
 import ViewFeedback from "./page/admin/ViewFeedback";
@@ -30,6 +29,10 @@ import DipositSaving from "./page/acountant/DipositSaving";
 import RegisterCustomer from "./page/acountant/RegisterCustomer";
 import CustomerDepositSaviing from "./page/acountant/CustomerDepositSaviing";
 import LoanRequests from "./page/loancommittee/LoanRequests";
+import EmployeeManager from "./page/manager/EmployeeManager";
+import Postmeeting from "./page/manager/Postmeeting";
+import WithdrawRequest from "./page/manager/WithdrawRequest";
+import Loanrequest from "./page/manager/Loanrequest";
 
 function App() {
   const dispatch = useDispatch();
@@ -79,18 +82,22 @@ function App() {
             <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
-        
-        {/* customer route  */}
-        <Route element={<ProtectedRoute roles={["customer"]} />}>
-          <Route path="/customer" element={<CustomerLayout />}>
-            <Route index element={<>customer</>} />
-          </Route>
-        </Route>
 
         {/* manager route  */}
         <Route element={<ProtectedRoute roles={["manager"]} />}>
           <Route path="/manager" element={<ManagerLayout />}>
-            <Route index element={<>manager</>} />
+            <Route index element={<EmployeeManager />} />
+            <Route path="post-metting" element={<Postmeeting />} />
+            <Route path="meeting-date" element={<MettingDate />} />
+            <Route path="withdraw-request" element={<WithdrawRequest />} />
+            <Route path="loan-request" element={<Loanrequest />} />
+            <Route path="settings" element={<Setting />} />
+          </Route>
+        </Route>
+        {/* customer route  */}
+        <Route element={<ProtectedRoute roles={["customer"]} />}>
+          <Route path="/customer" element={<CustomerLayout />}>
+            <Route index element={<>customer</>} />
           </Route>
         </Route>
 

@@ -20,3 +20,8 @@ export const updateStatusLoanCommite = async (data) => {
     apiClient.post(`/${BASE}/commiteaproval/${data.id}`, data)
   );
 };
+export const updateStausManager = async (data) => {
+  return handleApiResponse(() =>
+    apiClient.post(`/${BASE}/manageraproval/${data.id}`, data)
+  );
+};

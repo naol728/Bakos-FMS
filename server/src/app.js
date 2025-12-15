@@ -5,6 +5,7 @@ import customerroute from "./routes/customer.routes.js";
 import depositroute from "./routes/deposit.routes.js";
 import withdrawroute from "./routes/withdraw.routes.js";
 import loanroute from "./routes/loan.routes.js";
+import mettingroute from "./routes/meeting.routes.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/error.middleware.js";
 const app = express();
@@ -16,6 +17,7 @@ app.use("/api/customer", customerroute);
 app.use("/api/fund", depositroute);
 app.use("/api/withdraw", withdrawroute);
 app.use("/api/loan", loanroute);
+app.use("/api/meeting", mettingroute);
 app.use("/", (req, res) => {
   res.send("Bakos Backend");
 });

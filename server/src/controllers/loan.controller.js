@@ -231,3 +231,45 @@ export const updateStatusLoanCommite = async (req, res) => {
     data,
   });
 };
+
+export const updateStatusManager = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  if (!status || !id) {
+    return res.status(400).json({
+      message: "commitee_comment status id require",
+    });
+  }
+  const { data, error } = await dbUpdateFactory(
+    "loan_requests",
+    {
+      status,
+    },
+    { id }
+  );
+  if (error) {
+    return res.status(400).json({
+      message: "error updating status ",
+    });
+  }
+
+  if (data.status === "manager_approved") {
+    const { customer_id, amount, repayment_years } = data;
+
+    const { data, error } = await dbInsertFactory("loan", {
+      amount,
+      repayment_years,
+      customer_id,
+    });
+    if (error) {
+      return res.status(400).json({
+        message: "Faild to add into loan table",
+        error,
+      });
+    }
+  }
+  res.status(200).json({
+    message: "Sucessfully Updated status",
+    data,
+  });
+};

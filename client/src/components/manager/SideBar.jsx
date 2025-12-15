@@ -1,10 +1,13 @@
 import {
   Calendar,
-  Home,
-  Inbox,
-  Search,
   Settings,
   LayoutDashboardIcon,
+  UserPlus,
+  Users,
+  UserCheck,
+  Wallet,
+  FileText,
+  MessageSquare,
 } from "lucide-react";
 
 import {
@@ -17,37 +20,27 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { NavLink, useLocation } from "react-router-dom";
 
 const items = [
+  { title: "Manage Employee", url: "/manager", icon: Users },
   {
-    title: "Dashboard",
-    url: "/admin",
-    icon: LayoutDashboardIcon,
+    title: "Post Meeting",
+    url: "/manager/post-metting",
+    icon: UserCheck,
   },
+  { title: "Meeting Dates", url: "/manager/meeting-date", icon: Calendar },
   {
-    title: "Inbox",
-    url: "/admin/inbox",
-    icon: Inbox,
+    title: "Withdraw Requests",
+    url: "/manager/withdraw-request",
+    icon: FileText,
   },
-  {
-    title: "Calendar",
-    url: "/admin/calendar",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "/admin/search",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "/admin/settings",
-    icon: Settings,
-  },
+  { title: "Loan Requests", url: "/manager/loan-request", icon: MessageSquare },
+  { title: "Settings", url: "/manager/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
-  const currentPath = window.location.pathname;
+  const location = useLocation();
 
   return (
     <Sidebar className="border-r bg-background">
@@ -59,45 +52,45 @@ export function AppSidebar() {
             alt="BAKOS Logo"
             className="w-14 h-14 rounded-md object-contain shadow-sm"
           />
-
           <div className="text-center">
             <h1 className="text-lg font-bold tracking-tight">
               BAKOS Institute
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Manager Panel
+              System Admin Panel
             </p>
           </div>
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sm font-semibold text-muted-foreground px-3 mt-4">
+          <SidebarGroupLabel className="px-3 mt-4 text-sm font-semibold text-muted-foreground">
             Navigation
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const isActive = currentPath === item.url;
+                const isActive = location.pathname === item.url;
 
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a
-                        href={item.url}
+                      <NavLink
+                        to={item.url}
+                        end={item.url === "/admin"} // only use 'end' for root dashboard
                         className={`
                           flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium
                           transition-all duration-200
                           ${
                             isActive
-                              ? "bg-primary/10 text-primary"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                              ? "bg-primary/15 text-primary shadow-sm"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                           }
                         `}
                       >
                         <item.icon className="h-4 w-4" />
                         <span>{item.title}</span>
-                      </a>
+                      </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
