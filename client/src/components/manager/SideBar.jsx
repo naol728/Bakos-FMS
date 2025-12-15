@@ -37,6 +37,7 @@ const items = [
   },
   { title: "Loan Requests", url: "/manager/loan-request", icon: MessageSquare },
   { title: "Settings", url: "/manager/settings", icon: Settings },
+  { title: "Feedbacks", url: "/manager/view-feedback", icon: MessageSquare },
 ];
 
 export function AppSidebar() {

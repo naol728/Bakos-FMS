@@ -185,62 +185,64 @@ export default function Withdraw() {
                       </TableCell>
 
                       <TableCell className="text-right space-x-2">
-                        {/* Update */}
-                        <Dialog>
-                          <DialogTrigger asChild>
+                        {isPending && (
+                          <>
+                            {/* Update */}
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button size="sm" variant="outline">
+                                  <Edit className="h-4 w-4 mr-1" />
+                                  Update
+                                </Button>
+                              </DialogTrigger>
+
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>
+                                    Update Withdrawal Amount
+                                  </DialogTitle>
+                                </DialogHeader>
+
+                                <div className="space-y-4">
+                                  <Input
+                                    type="number"
+                                    placeholder="New amount"
+                                    value={updateAmount}
+                                    onChange={(e) =>
+                                      setUpdateAmount(e.target.value)
+                                    }
+                                  />
+
+                                  <Button
+                                    className="w-full"
+                                    onClick={() =>
+                                      updateRequest.mutate({
+                                        id: item.id,
+                                        amount: updateAmount,
+                                      })
+                                    }
+                                    disabled={updateRequest.isPending}
+                                  >
+                                    {updateRequest.isPending && (
+                                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    )}
+                                    Update Amount
+                                  </Button>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+
+                            {/* Cancel */}
                             <Button
                               size="sm"
-                              variant="outline"
-                              disabled={!isPending}
+                              variant="destructive"
+                              onClick={() => deleteRequest.mutate(item.id)}
                             >
-                              <Edit className="h-4 w-4 mr-1" />
-                              Update
+                              <X className="h-4 w-4 mr-1" />
+                              Cancel
                             </Button>
-                          </DialogTrigger>
-
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>
-                                Update Withdrawal Amount
-                              </DialogTitle>
-                            </DialogHeader>
-
-                            <div className="space-y-4">
-                              <Input
-                                type="number"
-                                placeholder="New amount"
-                                value={updateAmount}
-                                onChange={(e) =>
-                                  setUpdateAmount(e.target.value)
-                                }
-                              />
-
-                              <Button
-                                className="w-full"
-                                onClick={() =>
-                                  updateRequest.mutate({
-                                    id: item.id,
-                                    amount: updateAmount,
-                                  })
-                                }
-                                disabled={updateRequest.isPending}
-                              >
-                                Update Amount
-                              </Button>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-
-                        {/* Cancel */}
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          disabled={!isPending}
-                          onClick={() => deleteRequest.mutate(item.id)}
-                        >
-                          <X className="h-4 w-4 mr-1" />
-                          Cancel
-                        </Button>
+                          </>
+                        )}
                       </TableCell>
                     </TableRow>
                   );

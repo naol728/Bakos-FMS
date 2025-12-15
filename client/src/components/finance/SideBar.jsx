@@ -17,6 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { MessageSquare } from "lucide-react";
 
 const items = [
   {
@@ -44,6 +45,7 @@ const items = [
     url: "/admin/settings",
     icon: Settings,
   },
+  { title: "Feedbacks", url: "/admin/view-feedback", icon: MessageSquare },
 ];
 
 export function AppSidebar() {

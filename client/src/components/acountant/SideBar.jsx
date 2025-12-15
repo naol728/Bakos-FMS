@@ -41,6 +41,8 @@ const items = [
     url: "/accountant/deposit-save-manage",
     icon: Calendar,
   },
+  { title: "Feedbacks", url: "/accountant/view-feedback", icon: MessageSquare },
+
   { title: "Settings", url: "/accountant/settings", icon: Settings },
 ];
 
@@ -62,7 +64,7 @@ export function AppSidebar() {
               BAKOS Institute
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Acountant Panel
+              System Admin Panel
             </p>
           </div>
         </div>
@@ -75,9 +77,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const isActive =
-                  location.pathname === item.url ||
-                  location.pathname.startsWith(item.url + "/");
+                const isActive = location.pathname === item.url;
 
                 return (
                   <SidebarMenuItem key={item.title}>

@@ -2,6 +2,7 @@ import { supabase } from "../config/supabase.js";
 import { dbInsertFactory } from "./dbInsertFactory.js";
 import { dbReadFactory } from "./dbReadFactory.js";
 import { dbUpdateFactory } from "./dbUpdateFactory.js";
+import { dbDeleteFactory } from "./dbDeleteFactory.js";
 
 export const getLoans = async (req, res) => {
   const { data: loans, error } = await supabase.from("loans").select(`
@@ -270,6 +271,134 @@ export const updateStatusManager = async (req, res) => {
   }
   res.status(200).json({
     message: "Sucessfully Updated status",
+    data,
+  });
+};
+
+export const getMyLoanrequests = async (req, res) => {
+  const userid = req.user.id;
+  const { data: user, error: usererr } = await dbReadFactory(
+    "customers",
+    {
+      user_id: userid,
+    },
+    true
+  );
+
+  const { data, error } = await dbReadFactory("loan_requests", {
+    customer_id: user.id,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      message: "faild to fetch the loan requests",
+      error,
+    });
+  }
+  res.status(200).json({
+    message: "sucessfully fetched the loan requests ",
+    data,
+  });
+};
+export const createLoanRequest = async (req, res) => {
+  const { amount, reason, repayment_years } = req.body;
+  const userid = req.user.id;
+  const { data: user, error: usererr } = await dbReadFactory(
+    "customers",
+    {
+      user_id: userid,
+    },
+    true
+  );
+
+  const { data, error } = await dbInsertFactory("loan_requests", {
+    amount,
+    reason,
+    repayment_years,
+    customer_id: user.id,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      message: "faild to create loan request",
+      error,
+    });
+  }
+  res.status(201).json({
+    message: "sucessfully created loan requesst",
+    data,
+  });
+};
+export const updateLoanRequest = async (req, res) => {
+  const { amount, reason, repayment_years, id } = req.body;
+  if (!amount || !reason || !repayment_years || !id) {
+    return res.status(400).json({
+      message: "Require amount, reason, repayment_years, id",
+    });
+  }
+  const { data, error } = await dbUpdateFactory(
+    "loan_requests",
+    {
+      amount,
+      reason,
+      repayment_years,
+    },
+    { id }
+  );
+
+  if (error) {
+    return res.status(400).json({
+      message: "faild to update loan request",
+      error,
+    });
+  }
+  res.status(200).json({
+    message: "sucessfully updated loan requesst",
+    data,
+  });
+};
+export const deleteLoanRequest = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({
+      message: "id is requried ",
+    });
+  }
+  const { error } = await dbDeleteFactory("loan_requests", { id });
+
+  if (error) {
+    return res.status(400).json({
+      message: error.message,
+      error,
+    });
+  }
+
+  res.status(200).json({
+    message: "sucessfully deleted the request",
+  });
+};
+export const getMyloans = async (req, res) => {
+  const userid = req.user.id;
+  const { data: user, error: usererr } = await dbReadFactory(
+    "customers",
+    {
+      user_id: userid,
+    },
+    true
+  );
+
+  const { data, error } = await dbReadFactory("loans", {
+    customer_id: user.id,
+  });
+  if (error) {
+    res.status(400).json({
+      message: "error while fetching the loans",
+      error,
+    });
+  }
+  res.status(200).json({
+    message: "Sucessfully fetched loans",
     data,
   });
 };

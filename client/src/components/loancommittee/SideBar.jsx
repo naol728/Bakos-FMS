@@ -39,6 +39,11 @@ const items = [
     url: "/loancommittee/settings",
     icon: Settings,
   },
+  {
+    title: "Feedbacks",
+    url: "/loancommittee/view-feedback",
+    icon: MessageSquare,
+  },
 ];
 
 export function AppSidebar() {

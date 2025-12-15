@@ -37,6 +37,7 @@ import LoanRequest from "./page/customer/LoanRequest";
 import Withdraw from "./page/customer/Withdraw";
 import Feedback from "./page/customer/Feedback";
 import CustomerDashboard from "./page/customer/CustomerDashboard";
+import Myloans from "./page/customer/Myloans";
 
 function App() {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ function App() {
             <Route index element={<LoanRequests />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="settings" element={<Setting />} />
+            <Route path="view-feedback" element={<ViewFeedback />} />
           </Route>
         </Route>
         {/* accountant route  */}
@@ -79,10 +81,13 @@ function App() {
             <Route path="registercustomer" element={<RegisterCustomer />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="deposit-save-manage" element={<DipositSaving />} />
+            <Route path="view-feedback" element={<ViewFeedback />} />
             <Route
               path="deposit-save-manage/:id"
               element={<CustomerDepositSaviing />}
             />
+            <Route path="view-feedback" element={<ViewFeedback />} />
+
             <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
@@ -94,6 +99,7 @@ function App() {
             <Route path="post-metting" element={<Postmeeting />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="withdraw-request" element={<WithdrawRequest />} />
+            <Route path="view-feedback" element={<ViewFeedback />} />
             <Route path="loan-request" element={<Loanrequest />} />
             <Route path="settings" element={<Setting />} />
           </Route>
@@ -105,6 +111,7 @@ function App() {
             <Route path="loan-reqest" element={<LoanRequest />} />
             <Route path="withdraw-request" element={<Withdraw />} />
             <Route path="feedback" element={<Feedback />} />
+            <Route path="myloans" element={<Myloans />} />
             <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
@@ -113,6 +120,7 @@ function App() {
         <Route element={<ProtectedRoute roles={["finance"]} />}>
           <Route path="/finance" element={<FinanceLayout />}>
             <Route index element={<>finance </>} />
+            <Route path="view-feedback" element={<ViewFeedback />} />
           </Route>
         </Route>
       </Routes>

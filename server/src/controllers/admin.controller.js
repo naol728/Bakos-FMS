@@ -222,17 +222,17 @@ export const getFeedbacks = async (req, res) => {
         message,
         created_at,
         customer:customer_id (
-          id,
           account_no,
           first_name,
           father_name,
           grand_father_name,
           sex,
           age,
-          university_id,
           deposit_amount,
-          share_amount,
-          photo
+          user:user_id(
+          photo,
+          phone
+          )
         )
       `
     )

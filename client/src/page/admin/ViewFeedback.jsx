@@ -1,6 +1,5 @@
 "use client";
 
-import { getFeedbacks } from "@/api/admin";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
@@ -8,10 +7,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { getFeedback } from "@/api/feedback";
 
 export default function ViewFeedback() {
   const { data, error, isLoading } = useQuery({
-    queryFn: getFeedbacks,
+    queryFn: getFeedback,
     queryKey: ["getFeedbacks"],
   });
 
@@ -88,18 +88,6 @@ export default function ViewFeedback() {
                   <li>
                     <span className="font-medium">Sex:</span>{" "}
                     {item.customer?.sex}
-                  </li>
-                  <li>
-                    <span className="font-medium">University ID:</span>{" "}
-                    {item.customer?.university_id}
-                  </li>
-                  <li>
-                    <span className="font-medium">Deposit:</span>{" "}
-                    {item.customer?.deposit_amount} ETB
-                  </li>
-                  <li>
-                    <span className="font-medium">Share Amount:</span>{" "}
-                    {item.customer?.share_amount} ETB
                   </li>
                 </ul>
               </div>
