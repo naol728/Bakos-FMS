@@ -1,11 +1,22 @@
 import { supabase } from "../config/supabase.js";
 import { transactionLog } from "../utils/transaction.js";
+import { dbDeleteFactory } from "./dbDeleteFactory.js";
+import { dbInsertFactory } from "./dbInsertFactory.js";
 import { dbReadFactory } from "./dbReadFactory.js";
 import { dbUpdateFactory } from "./dbUpdateFactory.js";
 
 export const getRequests = async (req, res) => {
   const userid = req.user.id;
-  const { data, error } = await dbReadFactory("withdraw_requests", { userid });
+  const { data: user, error: usererr } = await dbReadFactory(
+    "customers",
+    {
+      user_id: userid,
+    },
+    true
+  );
+  const { data, error } = await dbReadFactory("withdraw_requests", {
+    customer_id: user.id,
+  });
   if (error) {
     res.status(400).json({
       message: error.message,
@@ -67,7 +78,41 @@ export const getUserWithdrawalRequest = async (req, res) => {
   });
 };
 
-export const addRequest = async (req, res) => {};
+export const addRequest = async (req, res) => {
+  const userid = req.user.id;
+  const { amount } = req.body;
+  if (!amount) {
+    return res.status(400).json({
+      message: "request amount is required",
+    });
+  }
+  const { data: user, error: usererr } = await dbReadFactory(
+    "customers",
+    {
+      user_id: userid,
+    },
+    true
+  );
+
+  if (user.deposit_amount < amount) {
+    return res.status(400).json({
+      message: "insefincet balance ",
+    });
+  }
+  const { data, error } = await dbInsertFactory("withdraw_requests", {
+    amount,
+    customer_id: user.id,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "withdraw request faild to create",
+    });
+  }
+  res.status(201).json({
+    message: "Withdraw request created sucessfully",
+    data,
+  });
+};
 
 export const withdraw = async (req, res) => {
   const { amount, user_id } = req.body;
@@ -185,5 +230,59 @@ export const updateWithdrawStatusManger = async (req, res) => {
   return res.status(200).json({
     message: "Withdraw request updated successfully",
     data,
+  });
+};
+export const updateWithdrawalCustomer = async (req, res) => {
+  const userid = req.user.id;
+  const { amount, id } = req.body;
+  if (!amount) {
+    return res.status(400).json({
+      message: "request amount is required",
+    });
+  }
+  const { data: user, error: usererr } = await dbReadFactory(
+    "customers",
+    {
+      user_id: userid,
+    },
+    true
+  );
+  const { data, error } = await dbUpdateFactory(
+    "withdraw_requests",
+    {
+      amount,
+    },
+    { id }
+  );
+  if (error) {
+    return res.status(400).json({
+      message: "update error to withdraw_requests",
+      error,
+    });
+  }
+  res.status(200).json({
+    message: "Updated Sucessfully",
+    data,
+  });
+};
+
+export const deleteWithdrawal = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({
+      message: "id is required",
+    });
+  }
+  const { data, error } = await dbDeleteFactory("withdraw_requests", {
+    id,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "delete errror withdraw_requests",
+      error,
+    });
+  }
+  res.status(200).json({
+    message: "Deleted  Sucessfully",
   });
 };
