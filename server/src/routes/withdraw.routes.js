@@ -5,6 +5,8 @@ import {
   getRequests,
   getUserWithdrawalRequest,
   withdraw,
+  getWithdrawRequestsManager,
+  updateWithdrawStatusManger,
 } from "../controllers/withdraw.controller.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 const route = express.Router();
@@ -14,5 +16,7 @@ route.get("/userrequest/:user_id", asyncHandler(getUserWithdrawalRequest));
 route.get("/request/:id", asyncHandler(getRequest));
 route.post("/request", asyncHandler(addRequest));
 route.post("/withdraw", asyncHandler(withdraw));
+route.get("/managerwithdraw", asyncHandler(getWithdrawRequestsManager));
+route.post("/statusupdate", asyncHandler(updateWithdrawStatusManger));
 
 export default route;

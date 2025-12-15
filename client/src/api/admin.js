@@ -15,7 +15,6 @@ export const getFeedbacks = async () => {
 export const getmeetings = async () => {
   return handleApiResponse(() => apiClient.get(`/${BASE}/getmettings`));
 };
-
 export const updateEmployee = async (data) => {
   return handleApiResponse(() =>
     apiClient.patch(`/${BASE}/updateemployee`, data)
@@ -32,4 +31,7 @@ export const updateme = async (data) => {
 };
 export const log = async () => {
   return handleApiResponse(() => apiClient.get(`/${BASE}/log`));
+};
+export const createMeeting = async (data) => {
+  return handleApiResponse(() => apiClient.post(`/meeting/create`, data));
 };

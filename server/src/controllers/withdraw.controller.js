@@ -1,3 +1,4 @@
+import { supabase } from "../config/supabase.js";
 import { transactionLog } from "../utils/transaction.js";
 import { dbReadFactory } from "./dbReadFactory.js";
 import { dbUpdateFactory } from "./dbUpdateFactory.js";
@@ -127,6 +128,62 @@ export const withdraw = async (req, res) => {
   // Success response
   res.status(200).json({
     message: "Successfully withdrawn",
+    data,
+  });
+};
+
+export const getWithdrawRequestsManager = async (req, res) => {
+  const { data, error } = await supabase
+    .from("withdraw_requests")
+    .select(
+      "*,  customer:customer_id(first_name,account_no,father_name,grand_father_name,age,deposit_amount,user_id ,user:user_id(photo,phone))"
+    );
+
+  if (error) {
+    return res.status(400).json({
+      message: "error while fetching withdraw ",
+      error,
+    });
+  }
+  res.status(200).json({
+    message: "sucessfully withdraw requests fetched ",
+    data,
+  });
+};
+
+export const updateWithdrawStatusManger = async (req, res) => {
+  const { id, status, manager_comment } = req.body;
+
+  if (!id || !status) {
+    return res.status(400).json({
+      message: "Withdraw request id and status are required",
+    });
+  }
+
+  if (!["approved", "rejected", "pending"].includes(status)) {
+    return res.status(400).json({
+      message: "Invalid status value",
+    });
+  }
+  const { data, error } = await supabase
+    .from("withdraw_requests")
+    .update({
+      status,
+      manager_comment,
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    return res.status(400).json({
+      message: "Failed to update withdraw request",
+      error: error.message,
+    });
+  }
+
+  return res.status(200).json({
+    message: "Withdraw request updated successfully",
     data,
   });
 };

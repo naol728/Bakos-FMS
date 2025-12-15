@@ -9,3 +9,10 @@ export const getUserwithdraw = async (data) => {
 export const withdraw = async (data) => {
   return handleApiResponse(() => apiClient.post(`/${BASE}/withdraw`, data));
 };
+export const managerwithdrawreqest = async () => {
+  return handleApiResponse(() => apiClient.get(`/${BASE}/managerwithdraw`));
+};
+
+export const UpdateWithdrawStatus = async (data) => {
+  return handleApiResponse(() => apiClient.post(`/${BASE}/statusupdate`, data));
+};
