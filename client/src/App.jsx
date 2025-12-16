@@ -38,6 +38,9 @@ import Withdraw from "./page/customer/Withdraw";
 import Feedback from "./page/customer/Feedback";
 import CustomerDashboard from "./page/customer/CustomerDashboard";
 import Myloans from "./page/customer/Myloans";
+import FinanceReport from "./page/finance/FinanceReport";
+import LoanReport from "./page/finance/LoanReport";
+import DepositReport from "./page/finance/DepositReport";
 
 function App() {
   const dispatch = useDispatch();
@@ -54,9 +57,8 @@ function App() {
         {/* admin route  */}
         <Route element={<ProtectedRoute roles={["admin"]} />}>
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<Employee />} />
             <Route path="register-employee" element={<RegisterEmploye />} />
-            <Route path="manage-employee" element={<Employee />} />
             <Route path="new-customer" element={<Customer />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="log-file" element={<LogFile />} />
@@ -119,8 +121,12 @@ function App() {
         {/* finance route  */}
         <Route element={<ProtectedRoute roles={["finance"]} />}>
           <Route path="/finance" element={<FinanceLayout />}>
-            <Route index element={<>finance </>} />
+            <Route index element={<FinanceReport />} />
+            <Route path="deposit-report" element={<DepositReport />} />
+            <Route path="loan-report" element={<LoanReport />} />
+            <Route path="meeting-date" element={<MettingDate />} />
             <Route path="view-feedback" element={<ViewFeedback />} />
+            <Route path="settings" element={<Setting />} />
           </Route>
         </Route>
       </Routes>

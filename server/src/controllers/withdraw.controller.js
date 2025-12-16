@@ -167,7 +167,8 @@ export const withdraw = async (req, res) => {
     type: deposittype[1],
     customer_id: customer.id,
     amount,
-    // reference_id: deposit.id,
+    reference_id: deposit.id,
+    direction: "in",
   });
 
   // Success response

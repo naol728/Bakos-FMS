@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/table";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { Badge } from "@/components/ui/badge";
+
 import { Loader2, Banknote } from "lucide-react";
 
 export default function Myloans() {
@@ -51,17 +51,18 @@ export default function Myloans() {
         <CardContent>
           {loans.length === 0 ? (
             <div className="text-center text-muted-foreground py-10">
-              You have no active loans
+              You have no loans
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>#</TableHead>
-                  <TableHead>Amount (ETB)</TableHead>
-                  <TableHead>Interest Rate</TableHead>
+                  <TableHead>Loan Amount (ETB)</TableHead>
+                  <TableHead>Outstanding Balance</TableHead>
+                  <TableHead>Interest</TableHead>
                   <TableHead>Issue Date</TableHead>
-                  <TableHead>Repayment Years</TableHead>
+                  <TableHead>Years</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Disbursed</TableHead>
                 </TableRow>
@@ -76,13 +77,17 @@ export default function Myloans() {
                       {loan.amount} ETB
                     </TableCell>
 
+                    <TableCell className="font-semibold text-primary">
+                      {loan.outstanding_balance?.toFixed(2)} ETB
+                    </TableCell>
+
                     <TableCell>{loan.interest_rate}%</TableCell>
 
                     <TableCell>
                       {new Date(loan.issue_date).toLocaleDateString()}
                     </TableCell>
 
-                    <TableCell>{loan.repayment_years} years</TableCell>
+                    <TableCell>{loan.repayment_years} yrs</TableCell>
 
                     <TableCell>
                       <StatusBadge status={loan.status} />
@@ -106,9 +111,9 @@ export default function Myloans() {
   );
 }
 
-/* Status badge */
+/* ---------------- Status Badge ---------------- */
 function StatusBadge({ status }) {
   if (status === "active") return <Badge>Active</Badge>;
   if (status === "closed") return <Badge variant="secondary">Closed</Badge>;
-  return <Badge variant="secondary">Pending</Badge>;
+  return <Badge variant="outline">Unknown</Badge>;
 }

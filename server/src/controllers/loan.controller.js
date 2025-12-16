@@ -3,6 +3,8 @@ import { dbInsertFactory } from "./dbInsertFactory.js";
 import { dbReadFactory } from "./dbReadFactory.js";
 import { dbUpdateFactory } from "./dbUpdateFactory.js";
 import { dbDeleteFactory } from "./dbDeleteFactory.js";
+import { transactionLog } from "../utils/transaction.js";
+import { deposittype } from "../utils/type.js";
 
 export const getLoans = async (req, res) => {
   const { data: loans, error } = await supabase.from("loans").select(`
@@ -104,7 +106,6 @@ export const repayLoan = async (req, res) => {
     { id },
     true
   );
-  console.log(loan);
 
   if (loanerr || !loan) {
     return res.status(404).json({
@@ -128,7 +129,7 @@ export const repayLoan = async (req, res) => {
     "repayments",
     {
       loan_id: id,
-      amount, // ✅ number
+      amount,
     }
   );
 
@@ -143,7 +144,7 @@ export const repayLoan = async (req, res) => {
 
   const newBalance = Number(loan.amount) - amount;
 
-  const { error: updateerr } = await dbUpdateFactory(
+  const { error: updateerr, data } = await dbUpdateFactory(
     "loans",
     {
       amount: newBalance, // ✅ number
@@ -157,7 +158,13 @@ export const repayLoan = async (req, res) => {
       updateerr,
     });
   }
-
+  await transactionLog({
+    type: deposittype[3],
+    customer_id: data.customer_id,
+    amount,
+    reference_id: data.id,
+    direction: "in",
+  });
   /* ---------------- SUCCESS ---------------- */
 
   return res.status(200).json({
@@ -268,7 +275,15 @@ export const updateStatusManager = async (req, res) => {
         error,
       });
     }
+    await transactionLog({
+      type: deposittype[2],
+      customer_id,
+      amount,
+      reference_id: data.id,
+      direction: "out",
+    });
   }
+
   res.status(200).json({
     message: "Sucessfully Updated status",
     data,
