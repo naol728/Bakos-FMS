@@ -73,6 +73,7 @@ export const deposit = async (req, res) => {
     customer_id: customer.id,
     amount,
     reference_id: deposit.id,
+    direction: "in",
   });
 
   return res.status(201).json({

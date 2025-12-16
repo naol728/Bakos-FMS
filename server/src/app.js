@@ -7,6 +7,7 @@ import withdrawroute from "./routes/withdraw.routes.js";
 import loanroute from "./routes/loan.routes.js";
 import mettingroute from "./routes/meeting.routes.js";
 import feedbackroute from "./routes/feedback.routes.js";
+import financeroute from "./routes/finanace.route.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/error.middleware.js";
 const app = express();
@@ -20,6 +21,7 @@ app.use("/api/withdraw", withdrawroute);
 app.use("/api/loan", loanroute);
 app.use("/api/feedback", feedbackroute);
 app.use("/api/meeting", mettingroute);
+app.use("/api/finance", financeroute);
 app.use("/", (req, res) => {
   res.send("Bakos Backend");
 });

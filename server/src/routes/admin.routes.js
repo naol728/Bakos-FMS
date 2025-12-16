@@ -15,12 +15,11 @@ import { upload } from "./../middleware/upload.js";
 
 const route = express.Router();
 route.use(protect);
-route.use(upload.single("photo"));
 route.post("/createemployee", asyncHandler(createEmployee));
 route.get("/getemployee", asyncHandler(getEmployeee));
 route.patch("/updateemployee", asyncHandler(updateEmployee));
 route.delete("/deleteemployee/:id", asyncHandler(deleteEmployee));
-route.patch("/updateme", asyncHandler(updateme));
+route.patch("/updateme", upload.single("photo"), asyncHandler(updateme));
 route.get("/feedbacks", asyncHandler(getFeedbacks));
 route.get("/getmettings", asyncHandler(getMeetings));
 route.get("/log", asyncHandler(getLog));

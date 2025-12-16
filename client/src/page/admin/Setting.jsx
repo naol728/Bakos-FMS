@@ -19,100 +19,116 @@ import EditProfile from "@/components/admin/EditProfile";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, User, Mail, Phone, Shield } from "lucide-react";
+
 export default function Setting() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["me"],
     queryFn: me,
   });
-  const naviagate = useNavigate();
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handlelogout = () => {
+
+  const handleLogout = () => {
     dispatch(logout());
-    naviagate("/");
+    navigate("/");
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading user data.</div>;
+  if (isLoading) return <div className="text-center mt-10">Loading...</div>;
+  if (error)
+    return <div className="text-center mt-10">Failed to load profile</div>;
 
   const user = data?.user;
 
   return (
-    <Card className="max-w-3xl mx-auto mt-10 p-6">
-      <CardHeader>
-        <CardTitle className="text-2xl">Profile</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-          {/* Profile Image */}
-          <Avatar className="w-32 h-32">
-            <AvatarImage src={user.photo} />
-            <AvatarFallback>{user.full_name[0]}</AvatarFallback>
-          </Avatar>
+    <div className="max-w-4xl mx-auto mt-10">
+      <Card className="shadow-lg">
+        <CardHeader className="border-b">
+          <CardTitle className="text-2xl">My Profile</CardTitle>
+        </CardHeader>
 
-          {/* User Info */}
-          <div className="flex-1 space-y-3">
-            <div>
-              <Label className="text-sm text-muted-foreground">Full Name</Label>
-              <p className="text-lg font-medium">{user.full_name}</p>
-            </div>
+        <CardContent className="p-8">
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* LEFT – Avatar */}
+            <div className="flex flex-col items-center gap-4">
+              <Avatar className="w-36 h-36">
+                <AvatarImage src={user?.photo} />
+                <AvatarFallback className="text-3xl">
+                  {user?.full_name?.[0] || "U"}
+                </AvatarFallback>
+              </Avatar>
 
-            <div>
-              <Label className="text-sm text-muted-foreground">Email</Label>
-              <p className="text-lg">{user.email}</p>
-            </div>
-
-            <div>
-              <Label className="text-sm text-muted-foreground">Phone</Label>
-              <p className="text-lg">{user.phone}</p>
-            </div>
-
-            <div>
-              <Label className="text-sm text-muted-foreground">Role</Label>
-              <p className="text-lg">{user.role}</p>
-            </div>
-
-            <div>
-              <Label className="text-sm text-muted-foreground">
-                Account Created
-              </Label>
-              <p className="text-lg">
-                {new Date(user.created_at).toLocaleDateString()}
-              </p>
-            </div>
-
-            <div>
-              <Label className="text-sm text-muted-foreground">Status</Label>
               <p
-                className={`text-lg font-medium ${
+                className={`text-sm font-medium ${
                   user.is_active ? "text-green-600" : "text-red-600"
                 }`}
               >
-                {user.is_active ? "Active" : "Inactive"}
+                {user.is_active ? "Active Account" : "Inactive Account"}
               </p>
             </div>
 
-            <Dialog>
-              <DialogTrigger>
-                <Button>Update Profile</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Update Profile ?</DialogTitle>
-                  <DialogDescription>Update Profile of mine</DialogDescription>
-                  <EditProfile user={data} />
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-            <div>
-              <Button variant="destructive" onClick={handlelogout}>
-                <LogOut />
-                Log Out
-              </Button>
+            {/* RIGHT – Info */}
+            <div className="md:col-span-2 space-y-6">
+              <div className="grid sm:grid-cols-2 gap-6">
+                <InfoItem
+                  icon={<User />}
+                  label="Full Name"
+                  value={user.full_name}
+                />
+                <InfoItem icon={<Mail />} label="Email" value={user.email} />
+                <InfoItem icon={<Phone />} label="Phone" value={user.phone} />
+                <InfoItem icon={<Shield />} label="Role" value={user.role} />
+              </div>
+
+              <div>
+                <Label className="text-muted-foreground">Account Created</Label>
+                <p className="text-base">
+                  {new Date(user.created_at).toLocaleDateString()}
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>Update Profile</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Update Profile</DialogTitle>
+                      <DialogDescription>
+                        Edit your personal information
+                      </DialogDescription>
+                    </DialogHeader>
+                    <EditProfile user={data} />
+                  </DialogContent>
+                </Dialog>
+
+                <Button variant="outline">Update Password</Button>
+
+                <Button variant="destructive" onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+/* Reusable Info Item */
+function InfoItem({ icon, label, value }) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="text-muted-foreground mt-1">{icon}</div>
+      <div>
+        <Label className="text-muted-foreground">{label}</Label>
+        <p className="text-base font-medium">{value || "-"}</p>
+      </div>
+    </div>
   );
 }

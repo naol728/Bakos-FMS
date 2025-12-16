@@ -25,7 +25,13 @@ export const deleteEmployee = async (id) => {
 };
 
 export const updateme = async (data) => {
-  return handleApiResponse(() => apiClient.patch(`/${BASE}/updateme`, data));
+  return handleApiResponse(() =>
+    apiClient.patch(`/${BASE}/updateme`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  );
 };
 export const log = async () => {
   return handleApiResponse(() => apiClient.get(`/${BASE}/log`));

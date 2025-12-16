@@ -6,6 +6,7 @@ export const transactionLog = async ({
   customer_id,
   amount,
   reference_id = null,
+  direction,
 }) => {
   try {
     const { error } = await dbInsertFactory("transactions", {
@@ -13,6 +14,7 @@ export const transactionLog = async ({
       customer_id,
       amount,
       reference_id,
+      direction,
     });
     console.log(error);
     if (error) {
