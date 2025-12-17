@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ export default function RegisterEmployee() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    confirm_password: "", // ✅ NEW
     full_name: "",
     role: "",
     phone: "",
@@ -42,9 +44,33 @@ export default function RegisterEmployee() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // ✅ VALIDATION
+  const validateForm = () => {
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return false;
+    }
+
+    if (formData.password !== formData.confirm_password) {
+      toast.error("Passwords do not match");
+      return false;
+    }
+
+    if (!formData.role) {
+      toast.error("Please select a role");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate(formData);
+
+    if (!validateForm()) return;
+
+    const { confirm_password, ...payload } = formData; // ❌ remove confirm_password
+    mutate(payload);
   };
 
   return (
@@ -84,6 +110,8 @@ export default function RegisterEmployee() {
             required
           />
         </div>
+
+        {/* Phone */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground">Phone</label>
           <Input
@@ -91,7 +119,7 @@ export default function RegisterEmployee() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="Enter Phone"
+            placeholder="Enter phone"
             disabled={isPending}
             className="py-3"
             required
@@ -115,6 +143,23 @@ export default function RegisterEmployee() {
           />
         </div>
 
+        {/* ✅ CONFIRM PASSWORD */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground">
+            Confirm Password
+          </label>
+          <Input
+            type="password"
+            name="confirm_password"
+            value={formData.confirm_password}
+            onChange={handleChange}
+            placeholder="Confirm password"
+            disabled={isPending}
+            className="py-3"
+            required
+          />
+        </div>
+
         {/* Role */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground">Role</label>
@@ -124,7 +169,6 @@ export default function RegisterEmployee() {
               setFormData((prev) => ({ ...prev, role: value }))
             }
             disabled={isPending}
-            required
           >
             <SelectTrigger className="w-full py-3 bg-input text-foreground border border-border rounded-md">
               <SelectValue placeholder="Select role" />

@@ -26,6 +26,7 @@ export default function RegisterCustomer() {
     phone: "",
     email: "",
     password: "",
+    confirm_password: "", // ✅ NEW
     photo: null,
   });
 
@@ -51,12 +52,37 @@ export default function RegisterCustomer() {
     }));
   };
 
+  // ✅ FORM VALIDATION
+  const validateForm = () => {
+    if (!formData.email || !formData.password) {
+      toast.error("Email and password are required");
+      return false;
+    }
+
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return false;
+    }
+
+    if (formData.password !== formData.confirm_password) {
+      toast.error("Passwords do not match");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!validateForm()) return;
+
     const data = new FormData();
+
     for (const key in formData) {
-      data.append(key, formData[key]);
+      if (key !== "confirm_password") {
+        data.append(key, formData[key]);
+      }
     }
 
     mutate(data);
@@ -79,7 +105,6 @@ export default function RegisterCustomer() {
               onChange={handleChange}
               disabled={isPending}
             />
-
             <InputField
               label="First Name"
               name="first_name"
@@ -87,7 +112,6 @@ export default function RegisterCustomer() {
               onChange={handleChange}
               disabled={isPending}
             />
-
             <InputField
               label="Father Name"
               name="father_name"
@@ -95,7 +119,6 @@ export default function RegisterCustomer() {
               onChange={handleChange}
               disabled={isPending}
             />
-
             <InputField
               label="Grand Father Name"
               name="grand_father_name"
@@ -135,16 +158,14 @@ export default function RegisterCustomer() {
 
         {/* FINANCE INFO */}
         <Section title="Financial Information">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InputField
-              label="Deposit Amount"
-              name="deposit_amount"
-              type="number"
-              value={formData.deposit_amount}
-              onChange={handleChange}
-              disabled={isPending}
-            />
-          </div>
+          <InputField
+            label="Deposit Amount"
+            name="deposit_amount"
+            type="number"
+            value={formData.deposit_amount}
+            onChange={handleChange}
+            disabled={isPending}
+          />
         </Section>
 
         {/* CONTACT & LOGIN INFO */}
@@ -157,7 +178,6 @@ export default function RegisterCustomer() {
               onChange={handleChange}
               disabled={isPending}
             />
-
             <InputField
               label="Email"
               type="email"
@@ -172,6 +192,16 @@ export default function RegisterCustomer() {
               type="password"
               name="password"
               value={formData.password}
+              onChange={handleChange}
+              disabled={isPending}
+            />
+
+            {/* ✅ CONFIRM PASSWORD */}
+            <InputField
+              label="Confirm Password"
+              type="password"
+              name="confirm_password"
+              value={formData.confirm_password}
               onChange={handleChange}
               disabled={isPending}
             />
