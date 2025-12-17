@@ -28,6 +28,10 @@ export default function Login() {
       dispatch(loginSuccess(data.user));
 
       const { access_token, refresh_token, expires_at } = data.session;
+      localStorage.setItem(
+        "sb-bajgwnzcsvbfrhngbtnq-auth-token",
+        JSON.stringify(data.session)
+      );
       localStorage.setItem("token", access_token);
       localStorage.setItem("refreshtoken", refresh_token);
       localStorage.setItem("token_expires_at", expires_at);

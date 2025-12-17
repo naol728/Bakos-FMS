@@ -41,6 +41,8 @@ import Myloans from "./page/customer/Myloans";
 import FinanceReport from "./page/finance/FinanceReport";
 import LoanReport from "./page/finance/LoanReport";
 import DepositReport from "./page/finance/DepositReport";
+import ForgotPassword from "./page/auth/ForgotPassword";
+import ChangePassword from "./page/auth/ChanagePassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +55,8 @@ function App() {
       <Routes>
         {/* public routes */}
         <Route path="/" element={<Login />} />
+        <Route path="/chanegpassowrd" element={<ChangePassword />} />
+        <Route path="/reset-password" element={<ForgotPassword />} />
 
         {/* admin route  */}
         <Route element={<ProtectedRoute roles={["admin"]} />}>

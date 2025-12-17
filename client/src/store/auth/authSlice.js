@@ -56,6 +56,10 @@ const authSlice = createSlice({
       localStorage.setItem("role", action.payload.role);
       if (action.payload.session?.access_token) {
         localStorage.setItem("token", action.payload.session.access_token);
+        localStorage.setItem(
+          "sb-bajgwnzcsvbfrhngbtnq-auth-token",
+          JSON.stringify(action.payload.session)
+        );
       }
     },
     logout: (state) => {
@@ -68,6 +72,7 @@ const authSlice = createSlice({
       localStorage.removeItem("user");
       localStorage.removeItem("role");
       localStorage.removeItem("token");
+      localStorage.removeItem("sb-bajgwnzcsvbfrhngbtnq-auth-token");
     },
   },
   extraReducers: (builder) => {
