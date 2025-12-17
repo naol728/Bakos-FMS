@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { AppSidebar } from "./Sidebar";
+import { AppSidebar } from "@/components/finance/SideBar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function FinanceLayout() {
