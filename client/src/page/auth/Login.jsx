@@ -141,7 +141,7 @@ export default function Login() {
             <p className="text-center text-sm text-muted-foreground mt-2">
               Forgot your password?{" "}
               <Link
-                to="/forgot-password"
+                to="/reset-password"
                 className="font-medium text-primary hover:underline"
               >
                 Reset
