@@ -182,7 +182,12 @@ export default function ManageLoan() {
                     </div>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button size="sm">Approve / Reject</Button>
+                        <Button
+                          size="sm"
+                          disabled={loan.status == "manager_approved"}
+                        >
+                          Approve / Reject
+                        </Button>
                       </DialogTrigger>
 
                       <DialogContent className="max-w-md">

@@ -207,9 +207,13 @@ export default function Employee() {
                     e.preventDefault();
                   }}
                 >
-                  <DialogTrigger asChild>
-                    <div>Edit</div>
-                  </DialogTrigger>
+                  {emp.role == "admin" ? (
+                    <></>
+                  ) : (
+                    <DialogTrigger asChild>
+                      <div>Edit</div>
+                    </DialogTrigger>
+                  )}
                 </DropdownMenuItem>
 
                 <DialogContent>
@@ -221,12 +225,16 @@ export default function Employee() {
                 </DialogContent>
               </Dialog>
 
-              <DropdownMenuItem
-                className="text-red-600"
-                onClick={() => handledelete(emp.id)}
-              >
-                Delete
-              </DropdownMenuItem>
+              {emp.role == "admin" ? (
+                <></>
+              ) : (
+                <DropdownMenuItem
+                  className="text-red-600"
+                  onClick={() => handledelete(emp.id)}
+                >
+                  Delete
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

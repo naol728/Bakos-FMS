@@ -87,12 +87,14 @@ export const updateEmployee = async (req, res) => {
     { id: userid }
   );
 
+  const { full_name: updatedfullname, email: updatedemail } = data;
+
   await logEvent({
     user_id: req.user?.id,
     action_type: "UPDATE EMPLOYEE",
-    message: `EMPLOYEE ${full_name} UPDATED successfully`,
+    message: `EMPLOYEE ${updatedfullname} UPDATED successfully`,
     level: "INFO",
-    meta: { email },
+    meta: { updatedemail },
   });
   // Handle errors returned from the factory
   if (error) {
@@ -119,12 +121,13 @@ export const deleteEmployee = async (req, res) => {
   }
 
   const { data, error } = await dbDeleteFactory("users", { id });
+  const { full_name, email } = data;
   await logEvent({
     user_id: req.user?.id,
     action_type: "DELETE EMPLOYEE",
-    message: `EMPLOYEE ${data.user.full_name} DELETE successfully`,
-    level: "INFO",
-    meta: { email: data.user.email },
+    message: `EMPLOYEE ${full_name} DELETE successfully`,
+    level: "DANGER",
+    meta: { email },
   });
   if (error) {
     return res.status(400).json({

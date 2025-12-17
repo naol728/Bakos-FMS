@@ -228,7 +228,7 @@ export const updateWithdrawStatusManger = async (req, res) => {
     });
   }
 
-  return res.status(200).json({
+  res.status(200).json({
     message: "Withdraw request updated successfully",
     data,
   });

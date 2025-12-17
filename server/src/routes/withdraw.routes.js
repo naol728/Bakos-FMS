@@ -21,6 +21,7 @@ route.post("/request", asyncHandler(addRequest));
 route.post("/withdraw", asyncHandler(withdraw));
 route.get("/managerwithdraw", asyncHandler(getWithdrawRequestsManager));
 route.patch("/updatewithdraw", asyncHandler(updateWithdrawalCustomer));
+route.post("/statusupdate", asyncHandler(updateWithdrawStatusManger));
 route.delete("/deletewithdraw/:id", asyncHandler(deleteWithdrawal));
 
 export default route;

@@ -36,8 +36,8 @@ const items = [
     icon: FileText,
   },
   { title: "Loan Requests", url: "/manager/loan-request", icon: MessageSquare },
-  { title: "Settings", url: "/manager/settings", icon: Settings },
   { title: "Feedbacks", url: "/manager/view-feedback", icon: MessageSquare },
+  { title: "Settings", url: "/manager/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -55,7 +55,7 @@ export function AppSidebar() {
           />
           <div className="text-center">
             <h1 className="text-lg font-bold tracking-tight">
-              BAKOS Institute
+              BAKOS Saving & Credit Service
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
               System Admin Panel

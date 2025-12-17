@@ -15,7 +15,12 @@ export const dbDeleteFactory = async (table, match) => {
       };
     }
 
-    const { data, error } = await supabase.from(table).delete().match(match);
+    const { data, error } = await supabase
+      .from(table)
+      .delete()
+      .match(match)
+      .select("*")
+      .single();
 
     if (error) {
       return {

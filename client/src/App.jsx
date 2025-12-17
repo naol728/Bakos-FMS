@@ -43,6 +43,7 @@ import LoanReport from "./page/finance/LoanReport";
 import DepositReport from "./page/finance/DepositReport";
 import ForgotPassword from "./page/auth/ForgotPassword";
 import ChangePassword from "./page/auth/ChanagePassword";
+import ViewNewCustomer from "./page/admin/ViewNewCustomer";
 
 function App() {
   const dispatch = useDispatch();
@@ -63,7 +64,7 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Employee />} />
             <Route path="register-employee" element={<RegisterEmploye />} />
-            <Route path="new-customer" element={<Customer />} />
+            <Route path="new-customer" element={<ViewNewCustomer />} />
             <Route path="meeting-date" element={<MettingDate />} />
             <Route path="log-file" element={<LogFile />} />
             <Route path="view-feedback" element={<ViewFeedback />} />

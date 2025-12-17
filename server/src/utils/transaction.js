@@ -5,11 +5,11 @@ export const transactionLog = async ({
   type,
   customer_id,
   amount,
-  reference_id = null,
+  reference_id = "",
   direction,
 }) => {
   try {
-    const { error } = await dbInsertFactory("transactions", {
+    const { error, data } = await dbInsertFactory("transactions", {
       type,
       customer_id,
       amount,

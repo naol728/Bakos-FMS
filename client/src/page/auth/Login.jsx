@@ -84,7 +84,7 @@ export default function Login() {
           />
 
           <CardTitle className="text-3xl font-extrabold tracking-tight text-primary">
-            BAKOS Institute
+            BAKOS Saving & Credit Service
           </CardTitle>
 
           <p className="text-sm text-gray-500 dark:text-gray-400">
