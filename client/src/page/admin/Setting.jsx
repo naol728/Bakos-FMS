@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import EditProfile from "@/components/admin/EditProfile";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { LogOut, User, Mail, Phone, Shield } from "lucide-react";
 
 export default function Setting() {
@@ -104,8 +104,10 @@ export default function Setting() {
                     <EditProfile user={data} />
                   </DialogContent>
                 </Dialog>
-
-                <Button variant="outline">Update Password</Button>
+                <Link to="/chanegpassowrd">
+                  {" "}
+                  <Button variant="outline">Update Password</Button>
+                </Link>
 
                 <Button variant="destructive" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
