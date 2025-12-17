@@ -243,50 +243,69 @@ export const updateStatusLoanCommite = async (req, res) => {
 export const updateStatusManager = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-  if (!status || !id) {
+
+  // 1️⃣ Validate input
+  if (!id) {
     return res.status(400).json({
-      message: "commitee_comment status id require",
+      message: "Loan request id is required",
     });
   }
-  const { data, error } = await dbUpdateFactory(
+
+  if (!status) {
+    return res.status(400).json({
+      message: "Status is required",
+    });
+  }
+
+  // 2️⃣ Update loan request status
+  const { data: updatedRequest, error: updateError } = await dbUpdateFactory(
     "loan_requests",
-    {
-      status,
-    },
+    { status },
     { id }
   );
-  if (error) {
+
+  if (updateError || !updatedRequest) {
     return res.status(400).json({
-      message: "error updating status ",
+      message: "Failed to update loan request status",
+      error: updateError,
     });
   }
 
-  if (data.status === "manager_approved") {
-    const { customer_id, amount, repayment_years } = data;
+  // 3️⃣ If manager approved → create loan + transaction
+  if (updatedRequest.status === "manager_approved") {
+    const { customer_id, amount, repayment_years } = updatedRequest;
 
-    const { data, error } = await dbInsertFactory("loan", {
-      amount,
-      repayment_years,
-      customer_id,
-    });
-    if (error) {
+    // Create loan
+    const { data: createdLoan, error: loanError } = await dbInsertFactory(
+      "loans",
+      {
+        customer_id,
+        amount,
+        repayment_years,
+      }
+    );
+
+    if (loanError || !createdLoan) {
       return res.status(400).json({
-        message: "Faild to add into loan table",
-        error,
+        message: "Failed to create loan record",
+        error: loanError,
       });
     }
-    await transactionLog({
+    const { id: creaedloanid } = createdLoan;
+    // Log transaction
+    const transactionResult = await transactionLog({
       type: deposittype[2],
       customer_id,
       amount,
-      reference_id: data.id,
+      reference_id: creaedloanid,
       direction: "out",
     });
   }
 
-  res.status(200).json({
-    message: "Sucessfully Updated status",
-    data,
+  // 4️⃣ Success response
+  return res.status(200).json({
+    message: "Status updated successfully",
+    data: updatedRequest,
   });
 };
 

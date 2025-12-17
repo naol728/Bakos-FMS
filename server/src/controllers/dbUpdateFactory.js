@@ -19,7 +19,9 @@ export const dbUpdateFactory = async (table, payload, match) => {
     const { data, error } = await supabase
       .from(table)
       .update(payload)
-      .match(match);
+      .match(match)
+      .select("*")
+      .single();
 
     if (error) {
       return {
