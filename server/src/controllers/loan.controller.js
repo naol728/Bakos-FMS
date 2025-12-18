@@ -35,7 +35,7 @@ export const getLoans = async (req, res) => {
 export const depenseLoan = async (req, res) => {
   const { amount, user_id, id } = req.body;
   if (!amount || !user_id || !id) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "amount and user_id and loan id isrequired",
     });
   }
@@ -53,24 +53,22 @@ export const depenseLoan = async (req, res) => {
       loanupdaterr,
     });
   }
-  const { data: customer, error: customererr } = await dbReadFactory(
-    "customers",
-    {
-      user_id: user_id,
-    }
-  );
-  const { data, error } = await dbUpdateFactory(
-    "customers",
-    {
-      deposit_amount: customer.deposit_amount + amount,
-    },
-    {
-      user_id: user_id,
-    }
-  );
+  const { data: customer, error: customererr } = await supabase
+    .from("customers")
+    .select("*")
+    .eq("id", user_id)
+    .single();
+  console.log(customer);
+  const { data, error } = await supabase
+    .from("customers")
+    .update({ deposit_amount: customer.deposit_amount + amount })
+    .eq("id", user_id)
+    .single();
+
+  console.log(data);
 
   if (error) {
-    res.status(400).json({
+    return res.status(400).json({
       message: error.message,
       error,
     });
@@ -282,6 +280,7 @@ export const updateStatusManager = async (req, res) => {
         customer_id,
         amount,
         repayment_years,
+        outstanding_balance: amount,
       }
     );
 

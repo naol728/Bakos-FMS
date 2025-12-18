@@ -48,6 +48,7 @@ import Repayment from "@/components/acountant/Repayment";
 
 export default function ManageLoan() {
   const { loan, loanerr, loanloading } = useLoan();
+  console.log(loan);
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -92,6 +93,21 @@ export default function ManageLoan() {
         header: () => <div className="text-right">Amount</div>,
         cell: ({ row }) => {
           const amount = parseFloat(row.getValue("amount"));
+          return (
+            <div className="text-right font-medium">
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "ETB",
+              }).format(amount)}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "outstanding_balance",
+        header: () => <div className="text-right">Outstanding Balance</div>,
+        cell: ({ row }) => {
+          const amount = parseFloat(row.getValue("outstanding_balance"));
           return (
             <div className="text-right font-medium">
               {new Intl.NumberFormat("en-US", {
@@ -187,7 +203,9 @@ export default function ManageLoan() {
                   }}
                 >
                   <Dialog>
-                    <DialogTrigger>loan details</DialogTrigger>
+                    <DialogTrigger disabled={loanRow.status == "closed"}>
+                      loan details
+                    </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>loan depesment and repayment</DialogTitle>
@@ -229,7 +247,6 @@ export default function ManageLoan() {
     ],
     []
   );
-
   const table = useReactTable({
     data: loan?.loans || [],
     columns,

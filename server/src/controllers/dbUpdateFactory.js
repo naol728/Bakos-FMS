@@ -7,21 +7,22 @@ import { supabase } from "../config/supabase.js";
  * @param {object} match - Conditions to find the row(s) to update
  * @returns {object} - { error, data }
  */
-export const dbUpdateFactory = async (table, payload, match) => {
+export const dbUpdateFactory = async (
+  table,
+  payload,
+  match,
+  single = false
+) => {
   try {
     if (!match || Object.keys(match).length === 0) {
-      return {
-        error: { message: "Update condition is required", details: null },
-        data: null,
-      };
+      return { error: { message: "Update condition is required" }, data: null };
     }
 
-    const { data, error } = await supabase
-      .from(table)
-      .update(payload)
-      .match(match)
-      .select("*")
-      .single();
+    let query = supabase.from(table).update(payload).match(match).select("*");
+
+    if (single) query = query.single();
+
+    const { data, error } = await query;
 
     if (error) {
       return {
