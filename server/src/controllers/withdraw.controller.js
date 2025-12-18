@@ -1,5 +1,6 @@
 import { supabase } from "../config/supabase.js";
 import { transactionLog } from "../utils/transaction.js";
+import { deposittype } from "../utils/type.js";
 import { dbDeleteFactory } from "./dbDeleteFactory.js";
 import { dbInsertFactory } from "./dbInsertFactory.js";
 import { dbReadFactory } from "./dbReadFactory.js";
@@ -115,7 +116,7 @@ export const addRequest = async (req, res) => {
 };
 
 export const withdraw = async (req, res) => {
-  const { amount, user_id } = req.body;
+  const { amount, user_id, id } = req.body;
 
   if (!user_id || !amount || amount <= 0) {
     return res.status(400).json({
@@ -148,16 +149,18 @@ export const withdraw = async (req, res) => {
     });
   }
 
-  const { data, error } = await dbUpdateFactory(
-    "customers",
-    {
-      deposit_amount: customer.deposit_amount - amount,
-    },
-    {
-      id: user_id,
-    }
-  );
+  const { data, error } = await supabase
+    .from("customers")
+    .update({ deposit_amount: customer.deposit_amount - amount })
+    .eq("id", user_id)
+    .single();
 
+  const { data: withdrawupdate, error: withdrawupdateerr } = await supabase
+    .from("withdraw_requests")
+    .update({ is_processed: true })
+    .eq("id", id)
+    .single();
+  console.log(withdrawupdateerr);
   if (error) {
     return res.status(400).json({
       message: error.message,
@@ -167,7 +170,7 @@ export const withdraw = async (req, res) => {
     type: deposittype[1],
     customer_id: customer.id,
     amount,
-    reference_id: deposit.id,
+    reference_id: id,
     direction: "in",
   });
 

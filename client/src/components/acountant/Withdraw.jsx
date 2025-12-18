@@ -48,6 +48,7 @@ export default function Withdraw({ user_id }) {
 
   const handleWithdraw = (req) => {
     mutate({
+      id: req.id,
       user_id: req.customer_id,
       amount: req.amount,
     });
@@ -97,7 +98,7 @@ export default function Withdraw({ user_id }) {
             {userwithdreq.data.map((req) => {
               const isApproved = req.status === "approved";
               const isRejected = req.status === "rejected";
-
+              const isProcessed = req.is_processed;
               return (
                 <TableRow key={req.id}>
                   <TableCell className="font-medium">
@@ -129,7 +130,7 @@ export default function Withdraw({ user_id }) {
                   </TableCell>
 
                   <TableCell className="text-right">
-                    {req.status === "approved" ? (
+                    {isApproved && !isProcessed && (
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button size="sm">Process</Button>
@@ -156,11 +157,21 @@ export default function Withdraw({ user_id }) {
                           </div>
                         </DialogContent>
                       </Dialog>
-                    ) : (
+                    )}
+
+                    {isApproved && isProcessed && (
+                      <Badge variant="success">Withdrawn</Badge>
+                    )}
+
+                    {req.status === "pending" && (
                       <Button size="sm" variant="outline" disabled>
-                        {req.status === "pending"
-                          ? "Awaiting Approval"
-                          : "Rejected"}
+                        Awaiting Approval
+                      </Button>
+                    )}
+
+                    {isRejected && (
+                      <Button size="sm" variant="destructive" disabled>
+                        Rejected
                       </Button>
                     )}
                   </TableCell>
